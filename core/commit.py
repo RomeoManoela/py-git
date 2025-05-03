@@ -15,10 +15,14 @@ def commit(message: str) -> None:
     """
     with open(f"{BASE_DIR}/.py-git/HEAD", "r") as head_file:
         head_content = head_file.read().strip()
-        if head_content == "":
-            parent = ""
-        else:
-            parent = head_content
+        parent = head_content
+
+    prev_index_hash = ""
+    if parent != "":
+        with open(f"{BASE_DIR}/.py-git/commits/{parent}", "r") as parent_file:
+            parent_content = parent_file.read()
+            commit_json = json.loads(parent_content)
+            prev_index_hash = commit_json["index_hash"]
 
     with open(f"{BASE_DIR}/.py-git/index", "r") as index_file:
         index_content = index_file.read()
@@ -27,7 +31,12 @@ def commit(message: str) -> None:
                 "[bold red]No changes to commit, please add it first[/bold red]"
             )
             return
+        index_hash = hashlib.sha1(index_content.encode()).hexdigest()
         files = index_content.split("\n")
+
+    if prev_index_hash == index_hash:
+        console.print("[bold red]No changes to commit, please add it first[/bold red]")
+        return
 
     dic_files = {}
     for file in files:
@@ -40,8 +49,9 @@ def commit(message: str) -> None:
 
     content = {
         "message": message,
-        "files": dic_files,
         "parent": parent,
+        "index_hash": index_hash,
+        "files": dic_files,
     }
 
     # Convert content to JSON string
@@ -61,10 +71,6 @@ def commit(message: str) -> None:
     # Update log
     with open(f"{BASE_DIR}/.py-git/log.txt", "a") as log_file:
         log_file.write(f"{commit_hash} - {message}\n")
-
-    # Clear index
-    with open(f"{BASE_DIR}/.py-git/index", "w") as index_file:
-        index_file.write("")
 
     console.print(
         Panel.fit(

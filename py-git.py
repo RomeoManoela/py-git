@@ -5,6 +5,7 @@ from core.commit import commit
 from core.diff import diff
 from core.init import init
 from core.logs import logs
+from core.status import status
 
 command = sys.argv[1]
 if command == "init":
@@ -39,3 +40,7 @@ if command == "diff":
 
 if command == "logs":
     logs()
+
+
+if command == "status":
+    status()
