@@ -1,8 +1,10 @@
-import os
 import sys
 
 from core.add import add
+from core.commit import commit
+from core.diff import diff
 from core.init import init
+from core.logs import logs
 
 command = sys.argv[1]
 if command == "init":
@@ -12,9 +14,28 @@ if command == "add":
     if len(sys.argv) < 3:
         print("Usage: py-git add <filenames>")
         sys.exit(1)
-    filenames: list[str] = []
+    filename: list[str] = []
     if len(sys.argv) == 3 and sys.argv[2] == ".":
-        filenames = [f for f in os.listdir() if os.path.isfile(f)]
-    else:
-        filenames = sys.argv[2:]
+        filename = ["."]
+
+    filenames = sys.argv[2:]
     add(filenames)
+
+if command == "commit":
+    if len(sys.argv) < 3:
+        print("Usage: py-git commit <message>")
+        sys.exit(1)
+    message = sys.argv[2]
+    commit(message)
+
+
+if command == "diff":
+    if len(sys.argv) < 3:
+        print("Usage: py-git diff <filename>")
+        sys.exit(1)
+    filename = sys.argv[2]
+    diff(filename)
+
+
+if command == "logs":
+    logs()

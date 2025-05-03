@@ -1,7 +1,12 @@
 import hashlib
 import json
 
+from rich.console import Console
+from rich.panel import Panel
+
 from core import BASE_DIR
+
+console = Console()
 
 
 def commit(message: str) -> None:
@@ -17,6 +22,11 @@ def commit(message: str) -> None:
 
     with open(f"{BASE_DIR}/.py-git/index", "r") as index_file:
         index_content = index_file.read()
+        if index_content == "":
+            console.print(
+                "[bold red]No changes to commit, please add it first[/bold red]"
+            )
+            return
         files = index_content.split("\n")
 
     dic_files = {}
@@ -52,7 +62,16 @@ def commit(message: str) -> None:
     with open(f"{BASE_DIR}/.py-git/log.txt", "a") as log_file:
         log_file.write(f"{commit_hash} - {message}\n")
 
-    print(f"Committed: {commit_hash}")
+    # Clear index
+    with open(f"{BASE_DIR}/.py-git/index", "w") as index_file:
+        index_file.write("")
 
-
-commit("Initial commit")
+    console.print(
+        Panel.fit(
+            f"[bold green]Commit successful![/bold green]\n"
+            f"[yellow]Hash:[/yellow] {commit_hash}\n"
+            f"[yellow]Message:[/yellow] {message}",
+            title="py-git commit",
+            border_style="green",
+        )
+    )
