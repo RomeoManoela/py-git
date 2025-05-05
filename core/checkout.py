@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from rich.console import Console
 from rich.panel import Panel
@@ -14,68 +15,104 @@ console = Console()
 def checkout(hash_commit: str) -> None:
     """
     Checkout a commit.
+
+    Args:
+        hash_commit: The commit hash to check out
     """
 
     committed_files: dict[str, str] = commit_files(hash_commit)
     if not committed_files:
         console.print(
             Panel(
-                "[bold yellow]Warning:[/bold yellow] No files in this commit or commit not found.",
+                "[bold yellow]Warning:[/bold yellow] No files in this commit",
                 title="Empty Commit",
                 border_style="yellow",
             )
         )
         return
 
+    curr_files = set(current_files())
+    committed_file_paths = set(committed_files.keys())
+
+    # Files to remove (in working directory but not in commit)
+    files_to_remove = curr_files - committed_file_paths
+
     with Progress(
         SpinnerColumn(),
         TextColumn("[bold blue]Checking out files...[/bold blue]"),
         console=console,
     ) as progress:
-        task = progress.add_task("Checking out", total=len(committed_files))
+
+        restore_task = progress.add_task("Restoring files", total=len(committed_files))
 
         for file, hash_file in committed_files.items():
             try:
-
-                file_dir = os.path.dirname(f"{BASE_DIR}/{file}")
-                if file_dir and not os.path.exists(file_dir):
-                    os.makedirs(file_dir, exist_ok=True)
+                file_path = Path(f"{BASE_DIR}/{file}")
+                file_dir = file_path.parent
+                if not file_dir.exists():
+                    file_dir.mkdir(parents=True, exist_ok=True)
 
                 with open(
                     f"{BASE_DIR}/.py-git/objects/{hash_file}", "rb"
                 ) as file_object:
-                    with open(f"{BASE_DIR}/{file}", "wb") as file_current:
+                    with open(file_path, "wb") as file_current:
                         file_current.write(file_object.read())
 
-                # Remove a file from index
-                with open(f"{BASE_DIR}/.py-git/index", "r") as index_file:
-                    index_content = index_file.read()
-                    index_content = index_content.replace(f"{hash_file}\t{file}\n", "")
-                with open(f"{BASE_DIR}/.py-git/index", "w") as index_file:
-                    index_file.write(index_content)
-
-                # Remove files from working directory
-                curr_files = current_files()
-                for f in curr_files:
-                    if f not in committed_files:
-                        os.remove(f"{BASE_DIR}/{f}")
-
-                progress.update(task, advance=1)
+                progress.update(restore_task, advance=1)
             except Exception as e:
                 console.print(
                     f"[bold red]Error restoring file {file}:[/bold red] {str(e)}"
                 )
 
-    # Update HEAD
+        if files_to_remove:
+            remove_task = progress.add_task(
+                "Removing extra files", total=len(files_to_remove)
+            )
+
+            for file in files_to_remove:
+                try:
+                    file_path = Path(f"{BASE_DIR}/{file}")
+                    if file_path.exists():
+                        file_path.unlink()
+                    progress.update(remove_task, advance=1)
+                except Exception as e:
+                    console.print(
+                        f"[bold red]Error removing file {file}:[/bold red] {str(e)}"
+                    )
+
+    cleanup_empty_directories(BASE_DIR)
+
     with open(f"{BASE_DIR}/.py-git/HEAD", "w") as head_file:
         head_file.write(hash_commit)
 
     console.print(
         Panel(
             f"[bold green]Successfully checked out commit:[/bold green]\n"
-            f"[yellow]Commit hash:[/yellow] {hash_commit}...\n"
-            f"[yellow]Files restored:[/yellow] {len(committed_files)}",
+            f"[yellow]Commit hash:[/yellow] {hash_commit[:8]}...\n"
+            f"[yellow]Files restored:[/yellow] {len(committed_files)}\n"
+            f"[yellow]Files removed:[/yellow] {len(files_to_remove)}",
             title="Checkout Complete",
             border_style="green",
         )
     )
+
+
+def cleanup_empty_directories(base_dir: str) -> None:
+    """
+    Remove empty directories recursively.
+
+    Args:
+        base_dir: Base directory to start from
+    """
+    for root, dirs, files in os.walk(base_dir, topdown=False):
+        # Skip .py-git directory
+        if ".py-git" in root:
+            continue
+
+        if not files and not dirs:
+            try:
+
+                if root != base_dir:
+                    os.rmdir(root)
+            except OSError:
+                pass
