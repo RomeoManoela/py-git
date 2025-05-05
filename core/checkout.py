@@ -15,22 +15,11 @@ def checkout(hash_commit: str) -> None:
     Checkout a commit.
     """
 
-    commits_dir = f"{BASE_DIR}/.py-git/commits"
-    if not os.path.exists(f"{commits_dir}/{hash_commit}"):
-        console.print(
-            Panel(
-                f"[bold red]Error:[/bold red] Commit [bold yellow]{hash_commit}[/bold yellow] not found",
-                title="Checkout Failed",
-                border_style="red",
-            )
-        )
-        return
-
     committed_files: dict[str, str] = commit_files(hash_commit)
     if not committed_files:
         console.print(
             Panel(
-                "[bold yellow]Warning:[/bold yellow] No files in this commit",
+                "[bold yellow]Warning:[/bold yellow] No files in this commit or commit not found.",
                 title="Empty Commit",
                 border_style="yellow",
             )

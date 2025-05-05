@@ -54,7 +54,6 @@ def commit(message: str) -> None:
         "files": dic_files,
     }
 
-    # Convert content to JSON string
     content_str = json.dumps(content, indent=2)
 
     # Generate commit hash

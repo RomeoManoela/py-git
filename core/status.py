@@ -1,5 +1,4 @@
 import hashlib
-import json
 import os
 
 from rich import box
@@ -8,6 +7,7 @@ from rich.panel import Panel
 from rich.table import Table
 
 from core import BASE_DIR
+from core.commit_files import commit_files
 
 console = Console()
 
@@ -28,10 +28,7 @@ def status():
     # Get files from the last commit if it exists
     committed_files = {}
     if current_head:
-        with open(f"{BASE_DIR}/.py-git/commits/{current_head}") as commit_file:
-            commit_content = commit_file.read()
-            commit_json = json.loads(commit_content)
-            committed_files = commit_json["files"]
+        committed_files = commit_files(current_head)
 
     # Get files from the index (staged)
     staged_files = {}
@@ -61,10 +58,10 @@ def status():
                     content = f.read()
                     working_files[file_path[2:]] = hashlib.sha1(content).hexdigest()
 
-    staged_new = []  # New files in staging
-    staged_modified = []  # Modified files in staging
-    modified = []  # Modified but not staged
-    untracked = []  # Not tracked at all
+    staged_new = []
+    staged_modified = []
+    modified = []
+    untracked = []
 
     # Check staged files against committed files
     for file, hash_value in staged_files.items():
@@ -80,7 +77,6 @@ def status():
         elif file in staged_files and staged_files[file] != hash_value:
             modified.append(file)
 
-    # Display the status
     if current_head:
         console.print(f"[bold blue]On commit:[/bold blue] {current_head[:8]}")
 

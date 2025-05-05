@@ -31,7 +31,6 @@ def logs():
     table.add_column("Commit Hash", style="dim")
     table.add_column("Message", style="green")
 
-    # Add rows to the table
     for line in commit_lines:
         if " - " in line:
             commit_hash, message = line.split(" - ", 1)

@@ -1,6 +1,7 @@
 import sys
 
 from core.add import add
+from core.checkout import checkout
 from core.commit import commit
 from core.diff import diff
 from core.init import init
@@ -44,3 +45,11 @@ if command == "logs":
 
 if command == "status":
     status()
+
+
+if command == "checkout":
+    if len(sys.argv) < 3:
+        print("Usage: py-git checkout <commit_hash>")
+        sys.exit(1)
+    hash_commit = sys.argv[2]
+    checkout(hash_commit)
