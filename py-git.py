@@ -7,10 +7,15 @@ from core.diff import diff
 from core.init import init
 from core.logs import logs
 from core.status import status
+from helpers.is_a_repos import is_a_repo
 
 command = sys.argv[1]
+
+
 if command == "init":
     init()
+
+is_a_repo()
 
 if command == "add":
     if len(sys.argv) < 3:
