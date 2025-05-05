@@ -7,7 +7,7 @@ from rich.panel import Panel
 from rich.table import Table
 
 from core import BASE_DIR
-from core.commit_files import commit_files
+from helpers.commit_files import commit_files
 
 console = Console()
 

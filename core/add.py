@@ -5,6 +5,7 @@ import shutil
 from rich.console import Console
 
 from core import BASE_DIR
+from helpers.current_files import current_files
 
 console = Console()
 
@@ -13,22 +14,7 @@ def add(filenames: list[str]) -> None:
     """Add files to the index (staging area)."""
     # Handle the special case of adding all files
     if filenames == ["."]:
-        filenames = []
-
-        for root, _, files in os.walk("./"):
-            for file in files:
-                # Skip .py-git directory and its contents
-                if ".py-git" in root:
-                    continue
-
-                rel_path = os.path.join(root, file)
-
-                if (
-                    ".py-git" not in rel_path
-                    and not rel_path.startswith("./.")
-                    and not file.startswith(".")
-                ):
-                    filenames.append(rel_path[2:])
+        filenames = current_files()
 
     index_path = f"{BASE_DIR}/.py-git/index"
     existing_entries = {}
