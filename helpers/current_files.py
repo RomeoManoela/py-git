@@ -1,15 +1,15 @@
 import os
 from pathlib import Path
-from typing import List, Set, Optional
+from typing import Optional
 
 from core import BASE_DIR
 
 
 def current_files(
-    ignore_dirs: Optional[Set[str]] = None,
-    ignore_patterns: Optional[Set[str]] = None,
+    ignore_dirs: Optional[set[str]] = None,
+    ignore_patterns: Optional[set[str]] = None,
     ignore_hidden: bool = True,
-) -> List[str]:
+) -> list[str]:
     """
     Get a list of all files in the current directory, excluding ignored files and directories.
 
@@ -31,12 +31,22 @@ def current_files(
             ".venv",
             "node_modules",
         }
+    gitignore_path = f"{BASE_DIR}/.py-gitignore"
+    if os.path.exists(gitignore_path):
+        with open(f"{BASE_DIR}/.py-gitignore") as ignore_files:
+            for line in ignore_files:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                if line.startswith("/"):
+                    line = line[:-1]
+                ignore_dirs.add(line)
+    print(ignore_dirs)
 
     if ignore_patterns is None:
         ignore_patterns = {"*.pyc", "*.pyo", "*.pyd", "*.so", "*.dll"}
 
     base_path = Path(BASE_DIR).resolve()
-    print(base_path)
     base_str_len = len(str(base_path)) + 1
 
     filenames = []
@@ -62,8 +72,10 @@ def current_files(
             full_path = root_path / file
             rel_path = str(full_path)[base_str_len:]
 
-            # Add to the list if not already ignored
             if rel_path:
                 filenames.append(rel_path)
 
     return sorted(filenames)
+
+
+print(current_files())

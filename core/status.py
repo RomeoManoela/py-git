@@ -1,5 +1,4 @@
 import hashlib
-import os
 
 from rich import box
 from rich.console import Console
@@ -8,6 +7,7 @@ from rich.table import Table
 
 from core import BASE_DIR
 from helpers.commit_files import commit_files
+from helpers.current_files import current_files
 
 console = Console()
 
@@ -16,7 +16,7 @@ def status():
     """
     Show the working tree status, similar to git status.
     """
-    # Check if HEAD exists
+
     with open(f"{BASE_DIR}/.py-git/HEAD", "r") as head_file:
         head_content = head_file.read().strip()
         if head_content == "":
@@ -25,7 +25,6 @@ def status():
         else:
             current_head = head_content
 
-    # Get files from the last commit if it exists
     committed_files = {}
     if current_head:
         committed_files = commit_files(current_head)
@@ -39,24 +38,12 @@ def status():
                 if len(parts) >= 2:
                     staged_files[parts[1]] = parts[0]
 
-    # Find all files in the working directory
     working_files = {}
-    for root, _, files in os.walk("./"):
-        if ".py-git" in root or ".git" in root:
-            continue
-        for file in files:
-            if file.startswith("."):
-                continue
-            file_path = os.path.join(root, file)
-            if (
-                ".py-git" not in file_path
-                and not file_path.startswith("./.")
-                and not file.startswith(".")
-            ):
-
-                with open(file_path, "rb") as f:
-                    content = f.read()
-                    working_files[file_path[2:]] = hashlib.sha1(content).hexdigest()
+    curr_files: list[str] = current_files()
+    for curr_file in curr_files:
+        with open(f"{BASE_DIR}/{curr_file}", "rb") as f:
+            content = f.read()
+            working_files[curr_file] = hashlib.sha1(content).hexdigest()
 
     staged_new = []
     staged_modified = []
@@ -78,9 +65,9 @@ def status():
             modified.append(file)
 
     if current_head:
-        console.print(f"[bold blue]On commit:[/bold blue] {current_head[:8]}")
+        console.print(f"[bold blue]On commit:[/bold blue] {current_head}")
 
-    # Create tables for different categories
+    # Tables for different categories
     if staged_new or staged_modified:
         staged_table = Table(show_header=True, header_style="green", box=box.SIMPLE)
         staged_table.add_column("Status")
