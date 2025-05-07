@@ -3,18 +3,17 @@ import os
 import shutil
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import List, Dict, Tuple
 
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
-from core import BASE_DIR
-from helpers.current_files import current_files
+from py_git.core import BASE_DIR
+from py_git.helpers.current_files import current_files
 
 console = Console()
 
 
-def hash_and_store_file(filename: str) -> Tuple[str, str, bool]:
+def hash_and_store_file(filename: str) -> tuple[str, str, bool]:
     """
     Hash a file and store it in the objects directory if needed.
 
@@ -43,7 +42,7 @@ def hash_and_store_file(filename: str) -> Tuple[str, str, bool]:
         return filename, "", False
 
 
-def add(filenames: List[str]) -> None:
+def add(filenames: list[str]) -> None:
     """
     Add files to the index (staging area).
 
@@ -70,7 +69,7 @@ def add(filenames: List[str]) -> None:
         return
 
     index_path = f"{BASE_DIR}/.py-git/index"
-    existing_entries: Dict[str, str] = {}
+    existing_entries: dict[str, str] = {}
 
     if os.path.exists(index_path):
         with open(index_path, "r") as index_file:

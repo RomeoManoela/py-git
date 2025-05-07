@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from typing import Optional
 
-from core import BASE_DIR
+from py_git.core import BASE_DIR
 
 
 def current_files(
@@ -76,6 +76,3 @@ def current_files(
                 filenames.append(rel_path)
 
     return sorted(filenames)
-
-
-print(current_files())

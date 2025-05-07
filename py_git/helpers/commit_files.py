@@ -3,7 +3,7 @@ import os
 
 from rich.console import Console
 
-from core import BASE_DIR
+from py_git.core import BASE_DIR
 
 console = Console()
 

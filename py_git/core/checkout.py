@@ -5,9 +5,9 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from core import BASE_DIR
-from helpers.commit_files import commit_files
-from helpers.current_files import current_files
+from py_git.core import BASE_DIR
+from py_git.helpers.commit_files import commit_files
+from py_git.helpers.current_files import current_files
 
 console = Console()
 

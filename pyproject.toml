@@ -1,10 +1,16 @@
 [project]
 name = "py-git"
 version = "0.1.0"
-description = "mini version control system"
+description = "mini version control system written in python"
+authors = [
+    { name = "romeomanoela", email = "romeomanoela18@gmail.com" },
+]
 requires-python = ">=3.12"
+readme = "README.md"
 dependencies = [
     "black>=25.1.0",
-    "notebook>=7.4.1",
     "rich>=14.0.0",
 ]
+
+[project.scripts]
+py-git = "py_git.cli:main"

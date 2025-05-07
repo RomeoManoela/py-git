@@ -1,11 +1,14 @@
 import os
 
 
-def init():
+def init() -> bool:
     """
     Initialize a new py-git repository.
     Creates the .py-git/ directory and necessary subdirectories/files.
     """
+    if os.path.exists(".py-git"):
+        print("py-git repository already exists")
+        return False
 
     os.makedirs(".py-git", exist_ok=True)
 
@@ -22,3 +25,4 @@ def init():
         log_file.write("# Commit history\n")
 
     print("py-git repository initialized successfully.")
+    return True
