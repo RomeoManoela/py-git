@@ -5,7 +5,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
-from py_git.core import BASE_DIR
+from src.py_git.core import BASE_DIR
 
 console = Console()
 

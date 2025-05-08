@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from typing import Optional
 
-from py_git.core import BASE_DIR
+from src.py_git.core import BASE_DIR
 
 
 def current_files(
