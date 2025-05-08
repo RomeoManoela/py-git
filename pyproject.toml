@@ -3,18 +3,17 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "py-git"
-version = "0.1.0"
+name = "minipygit"
+version = "0.1.1"
 description = "mini version control system written in python"
 authors = [
     { name = "romeomanoela", email = "romeomanoela18@gmail.com" },
 ]
 requires-python = ">=3.12"
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Development Status :: 3 - Alpha",
 ]
@@ -23,10 +22,11 @@ dependencies = [
     "build>=1.2.2.post1",
     "rich>=14.0.0",
     "setuptools>=61.0",
+    "twine>=6.1.0",
 ]
 
 [project.scripts]
-py-git = "py_git.cli:main"
+pygit = "py_git.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

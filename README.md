@@ -1,10 +1,11 @@
-# py-git
+github: https://github.com/RomeoManoela/py-git
+# minipygit
 
 A mini version control system written in Python, inspired by Git.
 
 ## Overview
 
-py-git is a lightweight version control system that implements the core functionality of Git. It's designed to be simple, educational, and functional for basic version control needs.
+minipygit is a lightweight version control system that implements the core functionality of Git. It's designed to be simple, educational, and functional for basic version control needs.
 
 ## Features
 
@@ -20,7 +21,7 @@ py-git is a lightweight version control system that implements the core function
 
 ```bash
 
-pip install py-git
+pip install minipygit
 ```
 
 ## Usage
@@ -51,27 +52,5 @@ py-git checkout <commit_hash>
 # Display help
 py-git --help
 ```
-
-## Project Structure
-
-```
-py-git/
-├── py_git/
-│   ├── core/           # Core functionality
-│   │   ├── add.py
-│   │   ├── checkout.py
-│   │   ├── commit.py
-│   │   ├── diff.py
-│   │   ├── init.py
-│   │   ├── logs.py
-│   │   └── status.py
-│   ├── helpers/        # Helper functions
-│   │   ├── commit_files.py
-│   │   ├── current_files.py
-│   │   └── is_a_repos.py
-│   ├── __init__.py
-│   └── cli.py          # Command-line interface
-├── pyproject.toml      # Project configuration
-└── README.md           # This file
 
 - Python 3.12 or higher
