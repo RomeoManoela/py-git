@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "minipygit"
-version = "0.1.1"
+version = "0.1.5"
 description = "mini version control system written in python"
 authors = [
     { name = "romeomanoela", email = "romeomanoela18@gmail.com" },
@@ -18,15 +18,19 @@ classifiers = [
     "Development Status :: 3 - Alpha",
 ]
 dependencies = [
+    "rich>=14.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
     "black>=25.1.0",
     "build>=1.2.2.post1",
-    "rich>=14.0.0",
-    "setuptools>=61.0",
     "twine>=6.1.0",
+    "setuptools>=61.0",
 ]
 
 [project.scripts]
-pygit = "py_git.cli:main"
+py-git = "py_git.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

@@ -1,11 +1,12 @@
 github: https://github.com/RomeoManoela/py-git
-# minipygit
+# minipygit (py-git)
 
 A mini version control system written in Python, inspired by Git.
 
 ## Overview
 
-minipygit is a lightweight version control system that implements the core functionality of Git. It's designed to be simple, educational, and functional for basic version control needs.
+minipygit is a lightweight version control system that implements the core functionality of Git.
+It's designed to be simple and functional for basic version control needs.
 
 ## Features
 
@@ -25,6 +26,8 @@ pip install minipygit
 ```
 
 ## Usage
+
+for ignored files, create a .py-gitignore file in the root of your repository and add the files you want to ignore
 
 ```bash
 # Initialize a new repository
