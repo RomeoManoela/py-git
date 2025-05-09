@@ -1,13 +1,13 @@
 import sys
 
-from src.py_git.core.add import add
-from src.py_git.core.checkout import checkout
-from src.py_git.core.commit import commit
-from src.py_git.core.diff import diff
-from src.py_git.core.init import init
-from src.py_git.core.logs import logs
-from src.py_git.core.status import status
-from src.py_git.helpers.is_a_repos import is_a_repo
+from py_git.core.add import add
+from py_git.core.checkout import checkout
+from py_git.core.commit import commit
+from py_git.core.diff import diff
+from py_git.core.init import init
+from py_git.core.logs import logs
+from py_git.core.status import status
+from py_git.helpers.is_a_repos import is_a_repo
 
 
 def show_help():

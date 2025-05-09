@@ -7,8 +7,8 @@ from pathlib import Path
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
-from src.py_git.core import BASE_DIR
-from src.py_git.helpers.current_files import current_files
+from py_git.core import BASE_DIR
+from py_git.helpers.current_files import current_files
 
 console = Console()
 

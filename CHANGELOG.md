@@ -1,4 +1,6 @@
-## [0.1.1] - 2025-05-08
+## [0.1.4] - 2025-05-09
 
-### Fixed
-- Corrected README formatting issues
+### Changed
+- Moved development dependencies to optional dependencies
+- fixed bugs
+- Reduced core dependencies to only those required for runtime

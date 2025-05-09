@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from typing import Optional
 
-from src.py_git.core import BASE_DIR
+from py_git.core import BASE_DIR
 
 
 def current_files(
@@ -41,7 +41,6 @@ def current_files(
                 if line.startswith("/"):
                     line = line[:-1]
                 ignore_dirs.add(line)
-    print(ignore_dirs)
 
     if ignore_patterns is None:
         ignore_patterns = {"*.pyc", "*.pyo", "*.pyd", "*.so", "*.dll"}
